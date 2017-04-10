@@ -9,12 +9,12 @@ class plugin_xxx_post extends Plugin{
 		array('type' => 'cron', 'cron' => array('id' => 'xxx_post/c_se', 'order' => '102')),
 		array('type' => 'cron', 'cron' => array('id' => 'xxx_post/c_sxbk', 'order' => '103')),
 	);
-	var $version='0.3.4';
+	var $version='0.3.6';
 	function checkCompatibility(){
-		if(version_compare(VERSION, '1.14.4.24', '<')) showmessage('签到助手版本过低，请升级');
+		if(version_compare(VERSION, '1.14.6.4', '<')) showmessage('签到助手版本过低，请升级');
 	}
 	function page_footer_js() {
-		echo '<script src="http://s.hydd.cc/kktieba/plugins/xxx_post/main.js?version=1.14.6.2"></script>';
+		echo '<script src="plugins/xxx_post/main.js"></script>';
 	}
 	function install() {
 		$query = DB::query ( 'SHOW TABLES' );
@@ -86,8 +86,11 @@ class plugin_xxx_post extends Plugin{
 			case '0.3.1':
 			case '0.3.2':
 			case '0.3.3':
+			case '0.3.4':
 				runquery("alter table `xxx_post_posts` modify column `tid` bigint(12);");
-				return '0.3.4';
+				return '0.3.5';
+			case '0.3.5':
+				return '0.3.6';
 			default:
 				throw new Exception("Unknown plugin version: {$from_version}");
 		}
@@ -247,10 +250,7 @@ EOF;
 				$tieurl = $_POST ['xxx_post_tid'];
 				preg_match ( '/tieba\.baidu\.com\/p\/(?<tid>\d+)/', $tieurl, $tids );
 				$tid=$tids ['tid'];
-				$ch = curl_init ('http://tieba.baidu.com/p/'.$tid);
-				curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
-				$contents = curl_exec ( $ch );
-				curl_close ( $ch );
+				$contents = _get_redirect_data("http://tieba.baidu.com/p/{$tid}");
 				$fid = 0;
 				preg_match ( '/"forum_id"\s?:\s?(?<fid>\d+)/', $contents, $fids );
 				$fid =$fids ['fid'];
