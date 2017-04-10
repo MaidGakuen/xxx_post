@@ -57,7 +57,7 @@ table.x_table thead tr{background-color:#dedede;}
 </style>
 
 <h2>客户端回帖</h2>
-<p class="small_gray">当前插件版本：0.3.4 | 更新日期：16-03-02 | Designed By <a href="http://tieba.baidu.com/home/main?un=%D0%C7%CF%D2%D1%A9&fr=index" target="_blank">@星弦雪</a> | Modify <a href="http://tieba.baidu.com/home/main?un=%D1%A7%D4%B0%BF%C6%BC%BC&fr=index" target="_blank">@学园科技</a> | 插件更新群：<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=ba20b2535872bd9ede8fc11e5b5badf42a4b992b0069ba1621e182ef5defc4dd">187751253</a></p>
+<p class="small_gray">当前插件版本：0.3.6 | 更新日期：17-4-09 | Designed By <a href="http://tieba.baidu.com/home/main?un=%D0%C7%CF%D2%D1%A9&fr=index" target="_blank">@星弦雪</a> | Optimized by <a href="http://gakuen.me" target="_blank">Gakuen</a> | 插件更新群：<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=ba20b2535872bd9ede8fc11e5b5badf42a4b992b0069ba1621e182ef5defc4dd">187751253</a></p>
 <p class="small_gray_i"><?php echo '——'.get_random_content();?>
 <div>
 	<ul class="nav-tabs">
@@ -75,11 +75,11 @@ table.x_table thead tr{background-color:#dedede;}
 		<p>
 			客户端类型：
 		<select name="x_p_client_type" id="x_p_client_type" disabled>
-		  <option value="1">iPhone(可能封禁)</option>
+		  <option value="1">iPhone</option>
 		  <option value="2">Android</option>
 		  <option value="3">Windows Phone</option>
 		  <option value="4">Windows 8</option>
-		  <option value="5">随机选择一种(不要选这个）</option>
+		  <option value="5">随机选择一种</option>
 		</select>
 		</p>
 		<p>回帖频率：
@@ -104,7 +104,7 @@ table.x_table thead tr{background-color:#dedede;}
 <table class="x_table">
 	<thead><tr><td style="width:20px">序号</td><td>贴吧</td><td>贴子</td><td style="width: 20%">操作</td></tr></thead>
 	<tbody id="xxx_post_show">
-		<tr><td colspan="4"><img src="http://s.hydd.cc/kktieba/template/default/style/loading.gif">载入中请稍后</td></tr>
+		<tr><td colspan="4"><img src="./template/default/style/loading.gif">载入中请稍后</td></tr>
 	</tbody>
 </table>
 <p>
@@ -116,7 +116,7 @@ table.x_table thead tr{background-color:#dedede;}
 <h3>添加回帖内容</h3><p>回帖时随机使用其中之一，不添加的话会使用系统内置的</p>
 <table class="x_table">
 	<thead><tr><td style="width: 20px">序号</td><td>回帖内容</td><td style="width: 20%">操作</td></tr></thead>
-	<tbody id="xxx_post_contents"><tr><td colspan="4"><img src="http://s.hydd.cc/kktieba/template/default/style/loading.gif">载入中请稍后</td></tr></tbody>
+	<tbody id="xxx_post_contents"><tr><td colspan="4"><img src="./template/default/style/loading.gif">载入中请稍后</td></tr></tbody>
 </table>
 <p>
 	<a class="btn" id="xxx_post_add_content">添加内容</a>
@@ -137,7 +137,7 @@ table.x_table thead tr{background-color:#dedede;}
 </div>
 
 <div>
-	<p>使用该插件需做好每日可能被封禁的准备，因发帖插件导致的账号被封、被屏蔽，请使用者自行承担后果</p>
+	<p>使用该插件需做好每日被永封的准备，因发帖插件导致的账号被封、被屏蔽，请使用者自行承担后果</p>
 	<p>回帖不宜设置过多，请控制好回帖数量。</p>
 	<h2>关于封禁与解封</h2>
 	<p>其实解封很简单的= =（作者表示已经被永封过无数次）</p>
