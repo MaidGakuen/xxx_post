@@ -9,7 +9,7 @@ class plugin_xxx_post extends Plugin{
 		array('type' => 'cron', 'cron' => array('id' => 'xxx_post/c_se', 'order' => '102')),
 		array('type' => 'cron', 'cron' => array('id' => 'xxx_post/c_sxbk', 'order' => '103')),
 	);
-	var $version='0.3.6';
+	var $version='0.3.7';
 	function checkCompatibility(){
 		if(version_compare(VERSION, '1.14.6.4', '<')) showmessage('签到助手版本过低，请升级');
 	}
@@ -90,7 +90,8 @@ class plugin_xxx_post extends Plugin{
 				runquery("alter table `xxx_post_posts` modify column `tid` bigint(12);");
 				return '0.3.5';
 			case '0.3.5':
-				return '0.3.6';
+			case '0.3.6':
+				return '0.3.7';
 			default:
 				throw new Exception("Unknown plugin version: {$from_version}");
 		}
@@ -219,10 +220,7 @@ EOF;
 				break;
 			case 'add-tieba' :
 				$tieba = $_POST ['xxx_post_add_tieba'];
-				$ch = curl_init ('http://tieba.baidu.com/f?kw='.urlencode(iconv("utf-8", "utf-8", $tieba)).'&fr=index');
-				curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
-				$contents = curl_exec ( $ch );
-				curl_close ( $ch );
+				$contents = _get_redirect_data('http://tieba.baidu.com/f?kw='.urlencode($tieba).'&fr=index');
 				$fid = 0;
 				preg_match('/"forum_id"\s?:\s?(?<fid>\d+)/', $contents, $fids);
 				$fid = $fids ['fid'];

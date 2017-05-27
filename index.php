@@ -57,7 +57,7 @@ table.x_table thead tr{background-color:#dedede;}
 </style>
 
 <h2>客户端回帖</h2>
-<p class="small_gray">当前插件版本：0.3.6 | 更新日期：17-4-09 | Designed By <a href="http://tieba.baidu.com/home/main?un=%D0%C7%CF%D2%D1%A9&fr=index" target="_blank">@星弦雪</a> | Optimized by <a href="http://gakuen.me" target="_blank">Gakuen</a> | 插件更新群：<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=ba20b2535872bd9ede8fc11e5b5badf42a4b992b0069ba1621e182ef5defc4dd">187751253</a></p>
+<p class="small_gray">当前插件版本：0.3.7 | 更新日期：17-5-27 | Designed By <a href="http://tieba.baidu.com/home/main?un=%D0%C7%CF%D2%D1%A9&fr=index" target="_blank">@星弦雪</a> | Optimized by <a href="http://gakuen.me" target="_blank">Gakuen</a> | 插件更新群：<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=ba20b2535872bd9ede8fc11e5b5badf42a4b992b0069ba1621e182ef5defc4dd">187751253</a></p>
 <p class="small_gray_i"><?php echo '——'.get_random_content();?>
 <div>
 	<ul class="nav-tabs">
