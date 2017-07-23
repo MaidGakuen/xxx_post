@@ -1,7 +1,7 @@
 <?php
-if (! defined ( 'IN_KKFRAME' ))	exit ();
-function get_random_content(){
-	$text=<<<EOF
+if (!defined('IN_KKFRAME')) exit();
+function get_random_content() {
+	$text = <<<EOF
 有的人认为坚持会让我们变得更强大，但有时候放手也会。
 你若想要得到，就别只是期望。人生短暂，经不起等待。
 如果觉得生活是一种刁难，一开始就输了。如果觉得刁难是一种雕刻，迟早都会赢的。
@@ -102,96 +102,102 @@ function get_random_content(){
 做一个安静细微的人，于角落里自在开放，默默悦人，却始终不引起过分热闹的关注，保有独立而随意的品格，这就很好。
 过去的事，不后悔；将来的事，不害怕。对于那些应经发生的事，要坦然接受，无论它对你产生的不利影响有多大，它都已经发生了。人生是一场一个人的旅程，无人可替代。总有人离开，总有人到来。
 EOF;
-	$contents=explode("\n", $text);
-	$content=$contents[array_rand($contents)];
+	$contents = explode("\n", $text);
+	$content = $contents[array_rand($contents)];
 	return $content;
 }
-
-function get_random_tid($tieba){
-	$ch = curl_init ('http://tieba.baidu.com/f?kw='.urlencode(iconv('utf-8', 'utf-8', $tieba)).'&fr=index');
-	curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
-	$contents = curl_exec ( $ch );
-	curl_close ( $ch );
-	$contents = str_replace('class=" j_thread_list','class="j_thread_list',$contents);
+function get_random_tid($tieba) {
+	$contents = _get_redirect_data('http://tieba.baidu.com/f?kw=' . urlencode($tieba) . '&fr=index');
+    $contents = str_replace('class=" j_thread_list','class="j_thread_list',$contents);
 	preg_match_all('/<li class="j_thread_list[A-z0-9 -_]+" data-field=\'{(?<json>.*?)}\'/', $contents, $jsontids);
-	foreach ($jsontids['json'] as $jsontid){
-		$jsontid=str_replace('&quot;','"', '{'.$jsontid.'}');
-		$tids[]=json_decode($jsontid)->id;
-		$tops[]=json_decode($jsontid)->is_top;
-		$goods[]=json_decode($jsontid)->is_good;
+	foreach ($jsontids['json'] as $jsontid) {
+		$jsontid = str_ireplace('&quot;', '"', '{' . $jsontid . '}');
+		$tids[] = json_decode($jsontid)->id;
+		$tops[] = json_decode($jsontid)->is_top;
+		$goods[] = json_decode($jsontid)->is_good;
 	}
-	$rnum = rand(0,count($tids)-1);
-	$tid=$tids[$rnum];
-	$top=$tops[$rnum];
-	$good=$goods[$rnum];
+	$rnum = mt_rand(0, count($tids) - 1);
+	$tid = $tids[$rnum];
+	$top = $tops[$rnum];
+	$good = $goods[$rnum];
 	if ($top == "true") return 'top';
 	elseif ($good == "true") return 'good';
 	return $tid;
 }
-
-
 function client_rppost($uid, $tieba, $content) {
-	$cookie = get_cookie ( $uid );
-	preg_match ( '/BDUSS=([^ ;]+);/i', $cookie, $matches );
-	$BDUSS = trim ( $matches [1] );
-	$setting = DB::fetch_first ( "SELECT * FROM xxx_post_setting WHERE uid='{$uid}'" );
-	if ($setting ['client_type'] == 5)
-		$setting ['client_type'] = rand ( 1, 4 );
-	if (! $BDUSS) return array (- 1,'找不到 BDUSS Cookie' );
-	if (! $content) $content=get_random_content();
-	if (! $tieba['tid']) $tieba['tid']=get_random_tid($tieba ['name']);
-	if ($tieba['tid'] == 'top') return array (9,"随机到置顶贴，取消本次回帖。" );
-	elseif ($tieba['tid'] == 'good') return array (10,"随机到精品贴，取消本次回帖。" );
-	$formdata = array (
-			'BDUSS' => $BDUSS,
-			'_client_id' => 'wappc_136' . random ( 10, true ) . '_' . random ( 3, true ),
-			'_client_type' => $setting ['client_type'],
-			'_client_version' => '5.0.0',
-			'_phone_imei' => md5 ( random ( 16 ) ),
-			'anonymous' => 0,
-			'content' => $content,
-			'fid' => $tieba ['fid'],
-			'kw' => urldecode ( $tieba ['name'] ),
-			'net_type' => 3,
-			'tbs' => get_tbs ( $tieba ['uid'] ),
-			'tid' => $tieba ['tid'],
-			'title' => ""
-	);
+	$cookie = get_cookie($uid);
+	preg_match('/BDUSS=([^ ;]+);/i', $cookie, $matches);
+	$BDUSS = trim($matches[1]);
+    if (!$BDUSS) return array(-1, '找不到 BDUSS Cookie');
+	$setting = DB::fetch_first("SELECT * FROM xxx_post_setting WHERE uid='{$uid}'");
+	if ($setting['client_type'] == 5) $setting['client_type'] = mt_rand(1, 4);
+	if (empty($content)) $content = get_random_content();
+	if (empty($tieba['tid'])) $tieba['tid'] = get_random_tid($tieba['name']);
+	if ($tieba['tid'] == 'top') return array(9, "随机到置顶贴，取消本次回帖。");
+	elseif ($tieba['tid'] == 'good') return array(10, "随机到精品贴，取消本次回帖。");
+	$formdata = array(
+        'BDUSS' => $BDUSS,
+        '_client_id' => 'wappc_1500' . random(9, true) . '_' . random(3, true) ,
+        '_client_type' => $setting['client_type'],
+        '_client_version' => '8.6.8.0',
+        '_phone_imei' => '000000000000000',
+        'anonymous' => 1,
+        'content' => $content,
+        'fid' => $tieba['fid'],
+        'kw' => urldecode($tieba['name']) ,
+        'model' => 'MI 4',
+        'tbs' => get_tbs($tieba['uid']) ,
+        'tid' => $tieba['tid'],
+        'timestamp' => time() . '000',
+        'vcode_tag' => '12'
+    );
 	$adddata = '';
-	foreach ( $formdata as $k => $v )
-		$adddata .= $k . '=' . $v;
-	$sign = strtoupper ( md5 ( $adddata . 'tiebaclient!!!' ) );
-	$formdata ['sign'] = $sign;
-	$ch = curl_init ( 'http://c.tieba.baidu.com/c/c/post/add' );
-	curl_setopt ( $ch, CURLOPT_HTTPHEADER, array (
-			'Content-Type: application/x-www-form-urlencoded'
-	) );
-	curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-	curl_setopt ( $ch, CURLOPT_COOKIE, $cookie );
-	curl_setopt ( $ch, CURLOPT_POST, true );
-	curl_setopt ( $ch, CURLOPT_POSTFIELDS, http_build_query ( $formdata ) );
-	$re = @json_decode ( curl_exec ( $ch ), ture );
-	curl_close ( $ch );
-	switch ($setting ['client_type']) {
-		case '1' :
-			$client_res = "iphone";
-			break;
-		case '2' :
-			$client_res = "android";
-			break;
-		case '3' :
-			$client_res = "WindowsPhone";
-			break;
-		case '4' :
-			$client_res = "Windows8";
-			break;
-	}
-	if (!$re) return array (0,'JSON 解析错误' );
-	if ($re ['error_code'] == 0) return array (2,"使用" . $client_res . '客户端发帖成功，<a href="http://tieba.baidu.com/p/' . $tieba ['tid'] . '" target="_blank">查看帖子</a>');
-	else if ($re ['error_code'] == 5) return array (5,"需要输入验证码，请检查你是否已经关注该贴吧。" 	);
-	else if ($re ['error_code'] == 7) return array (7,"您的操作太频繁了！" );
-	else if ($re ['error_code'] == 8) return array (8,"您已经被封禁" );
-	else return array($re ['error_code'],"未知错误，错误代码：" . $re ['error_code']);
-}
+	foreach ($formdata as $k => $v) $adddata .= $k . '=' . $v;
+	$sign = strtoupper(md5($adddata . 'tiebaclient!!!'));
+	$formdata['sign'] = $sign;
+	$ch = curl_init('http://c.tieba.baidu.com/c/c/post/add');
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/x-www-form-urlencoded',
+        'User-Agent: bdtb for Android 8.6.8.0'
+    ));
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($formdata));
+	$re = json_decode(curl_exec($ch), true);
+	curl_close($ch);
+    if (!$re) return array(0, 'JSON 解析错误');
 
-?>
+    switch ($setting['client_type']) {
+        case '1':
+            $client_res = "iPhone";
+            break;
+        case '2':
+            $client_res = "Android";
+            break;
+        case '3':
+            $client_res = "WindowsPhone";
+            break;
+        case '4':
+            $client_res = "Windows8";
+            break;
+        default:
+            $client_res = "Android";
+    }
+
+    switch ($re['error_code']) {
+        case '0':
+            return array(2, "使用 " . $client_res . ' 客户端发帖成功，<a href="http://tieba.baidu.com/p/' . $tieba['tid'] . '" target="_blank">查看帖子</a>');
+            break;
+        case '5':
+            return array(5, "需要输入验证码，请检查你是否已经关注该贴吧。");
+            break;
+        case '7':
+            return array(7, "您的操作太频繁了！");
+            break;
+        case '8':
+            return array(8, "您已经被封禁");
+            break;
+        default:
+            return array($re['error_code'], $re['error_msg']);
+    }
+}
