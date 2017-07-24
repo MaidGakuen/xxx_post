@@ -38,7 +38,7 @@ class plugin_xxx_post extends Plugin {
             )
         ),
     );
-    public $version = '0.3.9.1';
+    public $version = '0.4.0';
     function checkCompatibility() {
         if (version_compare(VERSION, '1.14.6.4', '<')) showmessage('签到助手版本过低，请升级');
     }
@@ -126,7 +126,8 @@ class plugin_xxx_post extends Plugin {
                 $this->saveSetting('max_delay', '15');
                 return '0.3.9';
 			case '0.3.9':
-				return '0.3.9.1';
+			case '0.3.9.1':
+				return '0.4.0';
             default:
                 throw new Exception("Unknown plugin version: {$from_version}");
         }
@@ -204,8 +205,8 @@ EOF;
                 break;
 
             case 'set-content':
-                $contx = $_POST['post_content'];
-                if (!$contx) {
+                $contx = trim($_POST['post_content']);
+                if (empty($contx)) {
                     $data['msg'] = "设置失败，请输入字符串";
                 } else {
                     DB::insert('xxx_post_content', array(
@@ -217,8 +218,8 @@ EOF;
                 break;
 
             case 'set-cont-plus':
-                $contplus = $_POST['x_p_contant'];
-                if (!trim($contplus)) {
+                $contplus = trim($_POST['x_p_contant']);
+                if (empty($contplus)) {
                     $data['msg'] = "设置失败，请输入字符串";
                 } else {
                     $cp_array = explode("\n", trim($contplus));
@@ -278,13 +279,16 @@ EOF;
 
             case 'add-tieba':
                 $tieba = trim($_POST['xxx_post_add_tieba']);
+				if (empty($tieba)) {
+					$data['msg'] = "添加失败，请输入贴吧名称！";
+					break;
+				}
                 $contents = _get_redirect_data('http://tieba.baidu.com/f?kw=' . urlencode($tieba) . '&fr=index');
                 $fid = 0;
                 preg_match('/"forum_id"\s?:\s?(?<fid>\d+)/', $contents, $fids);
                 $fid = $fids['fid'];
                 if ($fid == 0) {
                     $data['msg'] = "添加失败，请检查贴吧名称并重试";
-                    $data['msgx'] = 0;
                     break;
                 }
                 preg_match('/"forum_name"\s?:\s?(?<fname>"\S+?")/', $contents, $fnames);
@@ -303,7 +307,11 @@ EOF;
                 break;
 
             case 'get-tid':
-                $tieurl = $_POST['xxx_post_tid'];
+                $tieurl = trim($_POST['xxx_post_tid']);
+				if (empty($tieurl)) {
+					$data['msg'] = "添加失败，请输入帖子地址！";
+					break;
+				}
                 preg_match('/tieba\.baidu\.com\/p\/(?<tid>\d+)/', $tieurl, $tids);
                 $tid = $tids['tid'];
                 $contents = _get_redirect_data("http://tieba.baidu.com/p/{$tid}");

@@ -146,6 +146,7 @@ function client_rppost($uid, $tieba, $content) {
         'fid' => $tieba['fid'],
         'kw' => urldecode($tieba['name']) ,
         'model' => 'MI 6',
+		'new_vcode' => '1',
         'tbs' => get_tbs($tieba['uid']) ,
         'tid' => $tieba['tid'],
         'timestamp' => TIMESTAMP . '000',

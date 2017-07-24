@@ -69,7 +69,7 @@ $obj = $_PLUGIN['obj']['xxx_post'];
 </style>
 
 <h2>客户端回帖</h2>
-<p class="small_gray">当前插件版本：0.3.9.1 | 更新日期：17-7-24 | Designed By <a href="http://tieba.baidu.com/home/main?un=%D0%C7%CF%D2%D1%A9&fr=home" target="_blank">@星弦雪</a> | Optimized by <a href="http://gakuen.me" target="_blank">Gakuen</a> | 交流群：<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=ba20b2535872bd9ede8fc11e5b5badf42a4b992b0069ba1621e182ef5defc4dd">187751253</a></p>
+<p class="small_gray">当前插件版本：0.4.0 | 更新日期：17-7-24 | Designed By <a href="http://tieba.baidu.com/home/main?un=%D0%C7%CF%D2%D1%A9&fr=home" target="_blank">@星弦雪</a> | Optimized by <a href="http://gakuen.me" target="_blank">Gakuen</a> | 交流群：<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=ba20b2535872bd9ede8fc11e5b5badf42a4b992b0069ba1621e182ef5defc4dd">187751253</a></p>
 <p class="small_gray_i">
     <?php echo '——' . get_random_content(); ?>
     <div>
