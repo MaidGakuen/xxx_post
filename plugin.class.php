@@ -38,7 +38,7 @@ class plugin_xxx_post extends Plugin {
             )
         ),
     );
-    public $version = '0.3.9';
+    public $version = '0.3.9.1';
     function checkCompatibility() {
         if (version_compare(VERSION, '1.14.6.4', '<')) showmessage('签到助手版本过低，请升级');
     }
@@ -51,41 +51,41 @@ class plugin_xxx_post extends Plugin {
         while ($table = DB::fetch($query)) $tables[] = implode('', $table);
         if (!in_array('xxx_post_posts', $tables)) {
             runquery("
-			CREATE TABLE IF NOT EXISTS `xxx_post_posts` (
-				`sid` int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-				`uid` int(10) unsigned NOT NULL,
-				`fid` int(10) unsigned NOT NULL,
-				`tid` bigint(12) unsigned NOT NULL,
-				`name` varchar(127) NOT NULL,
-				`unicode_name` varchar(512) NOT NULL,
-				`post_name` varchar(127) NOT NULL
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+				CREATE TABLE IF NOT EXISTS `xxx_post_posts` (
+					`sid` int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					`uid` int(10) unsigned NOT NULL,
+					`fid` int(10) unsigned NOT NULL,
+					`tid` bigint(12) unsigned NOT NULL,
+					`name` varchar(127) NOT NULL,
+					`unicode_name` varchar(512) NOT NULL,
+					`post_name` varchar(127) NOT NULL
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-			CREATE TABLE IF NOT EXISTS `xxx_post_setting` (
-				`uid` int(10) unsigned NOT NULL PRIMARY KEY,
-				`client_type` tinyint(1) NOT NULL DEFAULT '5',
-				`frequency` tinyint(1) NOT NULL DEFAULT '2',
-				`delay` tinyint(2) NOT NULL DEFAULT '1',
-				`runtime` int(10) unsigned NOT NULL DEFAULT '0',
-				`runtimes` int(5) unsigned NOT NULL DEFAULT '6'
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+				CREATE TABLE IF NOT EXISTS `xxx_post_setting` (
+					`uid` int(10) unsigned NOT NULL PRIMARY KEY,
+					`client_type` tinyint(1) NOT NULL DEFAULT '5',
+					`frequency` tinyint(1) NOT NULL DEFAULT '2',
+					`delay` tinyint(2) NOT NULL DEFAULT '1',
+					`runtime` int(10) unsigned NOT NULL DEFAULT '0',
+					`runtimes` int(5) unsigned NOT NULL DEFAULT '6'
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-			CREATE TABLE IF NOT EXISTS `xxx_post_content` (
-				`cid` int(10) unsigned AUTO_INCREMENT PRIMARY KEY,
-				`uid` int(10) unsigned NOT NULL,
-				`content` varchar(1024) NOT NULL
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+				CREATE TABLE IF NOT EXISTS `xxx_post_content` (
+					`cid` int(10) unsigned AUTO_INCREMENT PRIMARY KEY,
+					`uid` int(10) unsigned NOT NULL,
+					`content` varchar(1024) NOT NULL
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-			CREATE TABLE IF NOT EXISTS `xxx_post_log` (
-				`sid` int(10) unsigned NOT NULL,
-				`uid` int(10) unsigned NOT NULL,
-				`date` int(11) NOT NULL DEFAULT '0',
-				`status` tinyint(4) NOT NULL DEFAULT '0',
-				`retry` tinyint(3) unsigned NOT NULL DEFAULT '0',
-				UNIQUE KEY `sid` (`sid`,`date`),
-				KEY `uid` (`uid`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-		");
+				CREATE TABLE IF NOT EXISTS `xxx_post_log` (
+					`sid` int(10) unsigned NOT NULL,
+					`uid` int(10) unsigned NOT NULL,
+					`date` int(11) NOT NULL DEFAULT '0',
+					`status` tinyint(4) NOT NULL DEFAULT '0',
+					`retry` tinyint(3) unsigned NOT NULL DEFAULT '0',
+					UNIQUE KEY `sid` (`sid`,`date`),
+					KEY `uid` (`uid`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+			");
             $this->saveSetting('sxbk', '0');
             $this->saveSetting('se', '21');
             $this->saveSetting('first_end', '15');
@@ -125,6 +125,8 @@ class plugin_xxx_post extends Plugin {
                 $this->saveSetting('min_delay', '0');
                 $this->saveSetting('max_delay', '15');
                 return '0.3.9';
+			case '0.3.9':
+				return '0.3.9.1';
             default:
                 throw new Exception("Unknown plugin version: {$from_version}");
         }
