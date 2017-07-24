@@ -127,8 +127,8 @@ function get_random_tid($tieba) {
 function client_rppost($uid, $tieba, $content) {
 	$cookie = get_cookie($uid);
 	preg_match('/BDUSS=([^ ;]+);/i', $cookie, $matches);
-	$BDUSS = trim($matches[1]);
-    if (!$BDUSS) return array(-1, '找不到 BDUSS Cookie');
+	$bduss = trim($matches[1]);
+    if (empty($bduss)) return array(-1, '找不到 BDUSS Cookie');
 	$setting = DB::fetch_first("SELECT * FROM xxx_post_setting WHERE uid='{$uid}'");
 	if ($setting['client_type'] == 5) $setting['client_type'] = mt_rand(1, 4);
 	if (empty($content)) $content = get_random_content();
@@ -136,7 +136,7 @@ function client_rppost($uid, $tieba, $content) {
 	if ($tieba['tid'] == 'top') return array(9, "随机到置顶贴，取消本次回帖。");
 	elseif ($tieba['tid'] == 'good') return array(10, "随机到精品贴，取消本次回帖。");
 	$formdata = array(
-        'BDUSS' => $BDUSS,
+        'BDUSS' => $bduss,
         '_client_id' => 'wappc_1500' . random(9, true) . '_' . random(3, true) ,
         '_client_type' => $setting['client_type'],
         '_client_version' => '8.6.8.0',
@@ -145,10 +145,10 @@ function client_rppost($uid, $tieba, $content) {
         'content' => $content,
         'fid' => $tieba['fid'],
         'kw' => urldecode($tieba['name']) ,
-        'model' => 'MI 4',
+        'model' => 'MI 6',
         'tbs' => get_tbs($tieba['uid']) ,
         'tid' => $tieba['tid'],
-        'timestamp' => time() . '000',
+        'timestamp' => TIMESTAMP . '000',
         'vcode_tag' => '12'
     );
 	$adddata = '';
