@@ -38,7 +38,7 @@ class plugin_xxx_post extends Plugin {
             )
         ),
     );
-    public $version = '0.4.0';
+    public $version = '0.4.1';
     function checkCompatibility() {
         if (version_compare(VERSION, '1.14.6.4', '<')) showmessage('签到助手版本过低，请升级');
     }
@@ -51,41 +51,41 @@ class plugin_xxx_post extends Plugin {
         while ($table = DB::fetch($query)) $tables[] = implode('', $table);
         if (!in_array('xxx_post_posts', $tables)) {
             runquery("
-				CREATE TABLE IF NOT EXISTS `xxx_post_posts` (
-					`sid` int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-					`uid` int(10) unsigned NOT NULL,
-					`fid` int(10) unsigned NOT NULL,
-					`tid` bigint(12) unsigned NOT NULL,
-					`name` varchar(127) NOT NULL,
-					`unicode_name` varchar(512) NOT NULL,
-					`post_name` varchar(127) NOT NULL
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+                CREATE TABLE IF NOT EXISTS `xxx_post_posts` (
+                    `sid` int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `uid` int(10) unsigned NOT NULL,
+                    `fid` int(10) unsigned NOT NULL,
+                    `tid` bigint(12) unsigned NOT NULL,
+                    `name` varchar(127) NOT NULL,
+                    `unicode_name` varchar(512) NOT NULL,
+                    `post_name` varchar(127) NOT NULL
+                ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-				CREATE TABLE IF NOT EXISTS `xxx_post_setting` (
-					`uid` int(10) unsigned NOT NULL PRIMARY KEY,
-					`client_type` tinyint(1) NOT NULL DEFAULT '5',
-					`frequency` tinyint(1) NOT NULL DEFAULT '2',
-					`delay` tinyint(2) NOT NULL DEFAULT '1',
-					`runtime` int(10) unsigned NOT NULL DEFAULT '0',
-					`runtimes` int(5) unsigned NOT NULL DEFAULT '6'
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+                CREATE TABLE IF NOT EXISTS `xxx_post_setting` (
+                    `uid` int(10) unsigned NOT NULL PRIMARY KEY,
+                    `client_type` tinyint(1) NOT NULL DEFAULT '5',
+                    `frequency` tinyint(1) NOT NULL DEFAULT '2',
+                    `delay` tinyint(2) NOT NULL DEFAULT '1',
+                    `runtime` int(10) unsigned NOT NULL DEFAULT '0',
+                    `runtimes` int(5) unsigned NOT NULL DEFAULT '6'
+                ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-				CREATE TABLE IF NOT EXISTS `xxx_post_content` (
-					`cid` int(10) unsigned AUTO_INCREMENT PRIMARY KEY,
-					`uid` int(10) unsigned NOT NULL,
-					`content` varchar(1024) NOT NULL
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+                CREATE TABLE IF NOT EXISTS `xxx_post_content` (
+                    `cid` int(10) unsigned AUTO_INCREMENT PRIMARY KEY,
+                    `uid` int(10) unsigned NOT NULL,
+                    `content` varchar(1024) NOT NULL
+                ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-				CREATE TABLE IF NOT EXISTS `xxx_post_log` (
-					`sid` int(10) unsigned NOT NULL,
-					`uid` int(10) unsigned NOT NULL,
-					`date` int(11) NOT NULL DEFAULT '0',
-					`status` tinyint(4) NOT NULL DEFAULT '0',
-					`retry` tinyint(3) unsigned NOT NULL DEFAULT '0',
-					UNIQUE KEY `sid` (`sid`,`date`),
-					KEY `uid` (`uid`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-			");
+                CREATE TABLE IF NOT EXISTS `xxx_post_log` (
+                    `sid` int(10) unsigned NOT NULL,
+                    `uid` int(10) unsigned NOT NULL,
+                    `date` int(11) NOT NULL DEFAULT '0',
+                    `status` tinyint(4) NOT NULL DEFAULT '0',
+                    `retry` tinyint(3) unsigned NOT NULL DEFAULT '0',
+                    UNIQUE KEY `sid` (`sid`,`date`),
+                    KEY `uid` (`uid`)
+                ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+            ");
             $this->saveSetting('sxbk', '0');
             $this->saveSetting('se', '21');
             $this->saveSetting('first_end', '15');
@@ -102,12 +102,12 @@ class plugin_xxx_post extends Plugin {
             case '0.2.3':
             case '0.3.0':
                 runquery("
-					UPDATE cron SET id='xxx_post/c_daily' WHERE id='xxx_post_daily';
-					UPDATE cron SET id='xxx_post/c_first' WHERE id='xxx_post';
-					UPDATE cron SET id='xxx_post/c_se' WHERE id='xxx_post_se';
-					UPDATE cron SET id='xxx_post/c_sxbk' WHERE id='xxx_post_sxbk';
-					alter table `xxx_post_posts` modify column `tid` bigint(12);
-				");
+                    UPDATE cron SET id='xxx_post/c_daily' WHERE id='xxx_post_daily';
+                    UPDATE cron SET id='xxx_post/c_first' WHERE id='xxx_post';
+                    UPDATE cron SET id='xxx_post/c_se' WHERE id='xxx_post_se';
+                    UPDATE cron SET id='xxx_post/c_sxbk' WHERE id='xxx_post_sxbk';
+                    alter table `xxx_post_posts` modify column `tid` bigint(12);
+                ");
                 $this->saveSetting('sxbk', '0');
                 $this->saveSetting('se', '21');
                 $this->saveSetting('first_end', '15');
@@ -125,9 +125,10 @@ class plugin_xxx_post extends Plugin {
                 $this->saveSetting('min_delay', '0');
                 $this->saveSetting('max_delay', '15');
                 return '0.3.9';
-			case '0.3.9':
-			case '0.3.9.1':
-				return '0.4.0';
+            case '0.3.9':
+            case '0.3.9.1':
+            case '0.4.0':
+                return '0.4.1';
             default:
                 throw new Exception("Unknown plugin version: {$from_version}");
         }
@@ -279,14 +280,14 @@ EOF;
 
             case 'add-tieba':
                 $tieba = trim($_POST['xxx_post_add_tieba']);
-				if (empty($tieba)) {
-					$data['msg'] = "添加失败，请输入贴吧名称！";
-					break;
-				}
+                if (empty($tieba)) {
+                    $data['msg'] = "添加失败，请输入贴吧名称！";
+                    break;
+                }
                 $contents = _get_redirect_data('http://tieba.baidu.com/f?kw=' . urlencode($tieba) . '&fr=index');
                 $fid = 0;
                 preg_match('/"forum_id"\s?:\s?(?<fid>\d+)/', $contents, $fids);
-                $fid = $fids['fid'];
+                $fid = !empty($fids) ? $fids['fid'] : 0;
                 if ($fid == 0) {
                     $data['msg'] = "添加失败，请检查贴吧名称并重试";
                     break;
@@ -308,16 +309,16 @@ EOF;
 
             case 'get-tid':
                 $tieurl = trim($_POST['xxx_post_tid']);
-				if (empty($tieurl)) {
-					$data['msg'] = "添加失败，请输入帖子地址！";
-					break;
-				}
+                if (empty($tieurl)) {
+                    $data['msg'] = "添加失败，请输入帖子地址！";
+                    break;
+                }
                 preg_match('/tieba\.baidu\.com\/p\/(?<tid>\d+)/', $tieurl, $tids);
                 $tid = $tids['tid'];
                 $contents = _get_redirect_data("http://tieba.baidu.com/p/{$tid}");
                 $fid = 0;
                 preg_match('/"forum_id"\s?:\s?(?<fid>\d+)/', $contents, $fids);
-                $fid = $fids['fid'];
+                $fid = !empty($fids) ? $fids['fid'] : 0;
                 if ($fid == 0) {
                     $data['msg'] = "添加失败，请检查帖子地址并重试";
                     $data['msgx'] = 0;

@@ -69,7 +69,7 @@ $obj = $_PLUGIN['obj']['xxx_post'];
 </style>
 
 <h2>客户端回帖</h2>
-<p class="small_gray">当前插件版本：0.4.0 | 更新日期：17-7-24 | Designed By <a href="http://tieba.baidu.com/home/main?un=%D0%C7%CF%D2%D1%A9&fr=home" target="_blank">@星弦雪</a> | Optimized by <a href="http://gakuen.me" target="_blank">Gakuen</a> | 交流群：<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=ba20b2535872bd9ede8fc11e5b5badf42a4b992b0069ba1621e182ef5defc4dd">187751253</a></p>
+<p class="small_gray">当前插件版本：0.4.1 | 更新日期：18-4-16 | Designed By <a href="http://tieba.baidu.com/home/main?un=%D0%C7%CF%D2%D1%A9&fr=home" target="_blank">@星弦雪</a> | Optimized by <a href="http://gakuen.me" target="_blank">Gakuen</a> | 交流群：<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=ba20b2535872bd9ede8fc11e5b5badf42a4b992b0069ba1621e182ef5defc4dd">187751253</a></p>
 <p class="small_gray_i">
     <?php echo '——' . get_random_content(); ?>
     <div>
@@ -84,7 +84,7 @@ $obj = $_PLUGIN['obj']['xxx_post'];
             <h3>常规</h3>
             <form method="post" id="xxx_post_settings" action="plugin.php?id=xxx_post&action=set-settings" onsubmit="return post_win(this.action, this.id)">
                 <p>客户端类型：
-                    <select name="x_p_client_type" id="x_p_client_type" disabled>
+                    <select name="x_p_client_type" id="x_p_client_type" required>
                         <option value="1">iPhone</option>
                         <option value="2">Android（推荐）</option>
                         <option value="3">Windows Phone</option>
@@ -93,7 +93,7 @@ $obj = $_PLUGIN['obj']['xxx_post'];
                     </select>
                 </p>
                 <p>回帖频率：
-                    <select name="x_p_frequency" id="x_p_frequency" disabled>
+                    <select name="x_p_frequency" id="x_p_frequency" required>
                         <option value="2">每天回一次</option>
                         <option value="1">早晚各回一次</option>
                         <?php if ($obj->getSetting ('sxbk') == 1) echo '<option value="4">极限刷帖</option>'; ?>
@@ -102,7 +102,7 @@ $obj = $_PLUGIN['obj']['xxx_post'];
                 <p>
                     <span id="x_p_runtimes_hide">
                         <?php $max_runtime = $obj->getSetting('max_runtime', 6); ?>
-                        每次回<input type="number" name="x_p_runtimes" id="x_p_runtimes" min="1" max="<?php echo $max_runtime; ?>" disabled>贴（最多为<?php echo $max_runtime; ?>）
+                        每次回<input type="number" name="x_p_runtimes" id="x_p_runtimes" min="1" max="<?php echo $max_runtime; ?>" required>贴（最多为<?php echo $max_runtime; ?>）
                     </span>
                 </p>
                 <p>
@@ -110,7 +110,7 @@ $obj = $_PLUGIN['obj']['xxx_post'];
                         $min_delay = $obj->getSetting('min_delay', 0);
                         $max_delay = $obj->getSetting('max_delay', 15);
                     ?>
-                    发出一贴后等待<input type="number" name="x_p_delay" id="x_p_delay" min="<?php echo $min_delay; ?>" max="<?php echo $max_delay; ?>" disabled>分钟再发下一帖（<?php echo $min_delay; ?> ~ <?php echo $max_delay; ?>分钟）
+                    发出一贴后等待<input type="number" name="x_p_delay" id="x_p_delay" min="<?php echo $min_delay; ?>" max="<?php echo $max_delay; ?>" required>分钟再发下一帖（<?php echo $min_delay; ?> ~ <?php echo $max_delay; ?>分钟）
                 </p>
                 <p><input type="submit" value="保存设置"></p>
             </form>
